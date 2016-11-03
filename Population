@@ -1,0 +1,310 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Population
+{
+
+   public static String toString(List<Integer> year)
+   {
+      String year5 = "";
+      if(year.size() > 2)
+      {
+         for (int z = 0; z < year.size(); z++) {
+            if (z == 0) {
+               year5 = year5 + String.valueOf(year.get(0));
+            } else if(z > 0 && z < (year.size() - 1)){
+               year5 = year5 + ", " + year.get(z);
+            }
+            else
+            {
+               year5 = year5 + ", and " + year.get(z);
+            }
+         }
+      }
+      else
+      {
+         year5 = year.get(0) + " and " + year.get(1);
+      }
+      return year5;
+   }
+
+   public static void main(String[] args)
+   {
+      List<Integer> year = new ArrayList<Integer>();
+      int numYears = 0;
+      int[] years = new int[117];
+      String yes = "y";
+      String no = "n";
+      boolean tried = false;
+      int by = 0;
+      int dy = 0;
+      //Person[] people = new Person[0];
+      List<Person> people = new ArrayList<Person>();
+      String ans1 = "";
+      Scanner scan = new Scanner(System.in);
+      // Checks to see if user wants to add a person the population
+      do 
+      {
+         System.out.print("Add a person to population (Y/N)?: ");
+         ans1 = scan.nextLine();
+         //Checks to see if user enters in something other than Y or N
+         if(!(ans1.equalsIgnoreCase(yes) || ans1.equalsIgnoreCase(no)))
+         {
+            System.out.println("Enter either Y or N");
+         }
+      } while (!(ans1.equalsIgnoreCase(yes) || ans1.equalsIgnoreCase(no)));
+      //If user entered Y, program asks for birth year and death year of the person being added
+      if(ans1.equalsIgnoreCase(yes));
+      {
+         // Loop repeats if user wants to add another Person to the population
+         do
+         {
+            //Asks for user for this Person's birth year
+            System.out.print("Enter persons birth year: ");
+            // If user enters a something other than an int, Exception is catched and user must enter a valid number after
+            do {
+               try
+               {
+                  by = Integer.parseInt(scan.nextLine());
+                  tried = true;
+               }
+               catch (NumberFormatException e)
+               {
+                  System.out.print("Please enter a valid number: ");
+               }
+            } while(tried == false);
+            //Changes tried to false for future try catch use
+            tried = false;
+            //Asks for user for this Person's birth year
+            System.out.print("Enter persons death year: ");
+            // If user enters a something other than an int, Exception is catched and user must enter a valid number after
+            do {
+               try
+               {
+                  dy = Integer.parseInt(scan.nextLine());
+                  tried = true;
+               }
+               catch (NumberFormatException e)
+               {
+                  System.out.print("Please enter a valid number: ");
+               }
+            } while(tried == false);
+            //Changes tried to false for future try catch use
+            tried = false;
+            //Checks to make sure person entered is valid
+            boolean v = Person.isValid(by, dy);
+            if(v)
+            {
+               //If birth and death year are valid, the Person is instantiated and added to the population
+               people.add(new Person(by, dy));
+               System.out.println("Added!");
+             //Prints current population
+               System.out.println("Current population: " + people.size() + " people");
+            }
+            if(!v)
+            {
+               //If birth and death year are invalid, user is asked to try again creating that person
+               do {
+                  System.out.print("Try again (Y/N)?: ");
+                  ans1 = scan.nextLine();
+                  //Checks to see if user enters in something other than Y or N
+                  if(!(ans1.equalsIgnoreCase(yes) || ans1.equalsIgnoreCase(no)))
+                  {
+                     System.out.println("Enter either Y or N");
+                  }
+               } while(!(ans1.equalsIgnoreCase(yes) || ans1.equalsIgnoreCase(no)));
+               if(ans1.equalsIgnoreCase(yes))
+               {
+                  //If user wants to try again, they are given the chance to enter birth and death year again
+                  while(ans1.equalsIgnoreCase(yes)) {
+                     System.out.print("Enter persons birth year: ");
+                     do {
+                        //Checks to make sure birth year is a number and repeats if not
+                        try
+                        {
+                           by = Integer.parseInt(scan.nextLine());
+                           tried = true;
+                        }
+                        catch (NumberFormatException e)
+                        {
+                           System.out.print("Please enter a valid number: ");
+                        }
+                     } while(tried == false);
+                     //Changes tried back to false for future try catch use
+                     tried = false;
+                     System.out.print("Enter persons death year: ");
+                     do {
+                        //Checks to make sure death year is a number and repeats if not
+                        try
+                        {
+                           dy = Integer.parseInt(scan.nextLine());
+                           tried = true;
+                        }
+                        catch (NumberFormatException e)
+                        {
+                           System.out.print("Please enter a valid number: ");
+                        }
+                     } while(tried == false);
+                     //Changes tried back to false for future try catch use
+                     tried = false;
+                     //Checks to make sure birth and death year entered are valid
+                     v = Person.isValid(by, dy);
+                     if(v)
+                     {
+                        //Adds Person if birth and death year are valid
+                        people.add(new Person(by, dy));
+                        System.out.println("Added!");
+                      //Prints current population
+                        System.out.println("Current population: " + people.size() + " people");
+                        ans1 = no;
+                     }
+                     if(!v)
+                     {
+                        //Asks to try again if birth and death year entered are not valid
+                        do {
+                           System.out.print("Try again (Y/N)?: ");
+                           ans1 = scan.nextLine();
+                           if(!(ans1.equalsIgnoreCase(yes) || ans1.equalsIgnoreCase(no)))
+                           {
+                              //Asks to enter Y or N if something else is input
+                              System.out.println("Enter either Y or N");
+                           }
+                        } while(!(ans1.equalsIgnoreCase(yes) || ans1.equalsIgnoreCase(no)));
+                        if(ans1.equalsIgnoreCase(no))
+                        {
+                           //Person is not added if user inputs N
+                           System.out.println("Person not added!");
+                         //Prints current population
+                           System.out.println("Current population: " + people.size() + " people");
+                        }
+                     }
+                  }
+               }
+               else if(ans1.equalsIgnoreCase(no))
+               {
+                  //Person is not added if user inputs N
+                  System.out.println("Person not added!");
+                  //Prints current population
+                  System.out.println("Current population: " + people.size() + " people");
+               }
+            }
+
+            do 
+            {
+             //Asks if user wants to add another person to the current population
+               System.out.print("Add another person to population (Y/N)?: ");
+               ans1 = scan.nextLine();
+               //Checks to see if user enters in something other than Y or N
+               if(!(ans1.equalsIgnoreCase(yes) || ans1.equalsIgnoreCase(no)))
+               {
+                  System.out.println("Enter either Y or N");
+               }
+            } while (!(ans1.equalsIgnoreCase(yes) || ans1.equalsIgnoreCase(no)));
+         } while(ans1.equalsIgnoreCase(yes));
+      }
+      
+      scan.close();
+      for (int q = 0; q < years.length; q++) {
+         // Initialize all years to 0
+         years[q] = 0;
+      }
+      int k, s, f;
+      for (k = 0; k < people.size(); k++)
+      {
+         f = (people.get(k).getDeathYear() - 1900);
+         for (s = (people.get(k).getBirthYear() - 1900); s <= f; s++)
+         {
+            // Fill years with people alive
+            years[s] += 1;
+         }
+      }
+
+      //Max number of people alive in a year
+      int m = 0;
+
+      for (int w = 0; w < years.length; w++) {
+         if (m == years[w]) {
+            /* If this year has the same number of people alive as current max, year is added to list of years with the
+            //same number of max people, numYears increases in size by one */
+            year.add(w + 1900);
+            numYears++;
+         } else if (m < years[w]) {
+            /*If this year has more people alive than current max; max is set the this years number of people alive,
+            the list of years with max people alive gets erased and then this year gets added to the list of years with
+            max people alive */
+            numYears = 1;
+            year = new ArrayList<Integer>();
+            m = years[w];
+            year.add(w + 1900);
+         }
+      }
+      
+      if (numYears > 1)
+      {
+         //Prints if there are more than one year with most people alive
+         System.out.println("In " + numYears + " years: " + toString(year)
+               + "; there were the most amount of people alive from 1900 to 2016 with " + m
+               + " people alive in each those years");
+      } else
+      {
+         //Prints if there is only one year with most people alive
+         System.out.println("In the year " + year.get(0)
+               + ", there were the most amount of people alive from 1900 to 2016 with " + m + " people");
+      }
+   }
+
+} // End of class Population
+
+class Person
+{
+   private int b;
+   private int d;
+   private boolean errorFlag;
+
+   public Person(int by, int dy)
+   {
+      set(by, dy);
+   }
+   
+   //Returns birth year of this Person
+   public int getBirthYear()
+   {
+      return b;
+   };
+
+   //Returns death year of this Person
+   public int getDeathYear()
+   {
+      return d;
+   };
+
+   //Sets birth and death year of Person. If not valid, this Person's birth and death do not get set
+   public boolean set(int b, int d)
+   {
+      errorFlag = !isValid(b, d);
+      if (!errorFlag)
+      {
+         this.b = b;
+         this.d = d;
+      }
+      return !errorFlag;
+   }
+
+   //Checks to make sure the given birth and death year are valid
+   public static boolean isValid(int b, int d)
+   {
+      boolean valid = true;
+      if (!(b >= 1900 && b <= 2000))
+      {
+         valid = false;
+         System.out.println("Please enter a valid birth year!");
+      }
+      if (!(d >= b && d <= 2016))
+      {
+         valid = false;
+         System.out.println("Please enter a valid death year!");
+      }
+      return valid;
+   }
+} //End of Person class
